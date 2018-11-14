@@ -79,10 +79,10 @@ class TwoLayerNet(object):
         ############################################################################
         # TODO: Implement the forward pass for the two-layer net, computing the    #
         # class scores for X and storing them in the scores variable.              #
+        ############################################################################
         W1, W2 = self.params['W1'], self.params['W2']
         b1, b2 = self.params['b1'], self.params['b2']
 
-        ############################################################################
         relu_out, affine_relu_cache= affine_relu_forward(X, W1, b1)
         fc1_cache, relu_cache = affine_relu_cache # fc1_cache is X, W1, b1.
         fc2_out, _ = affine_forward(relu_out, W2, b2) # this cahsh is the parameters we relu_out, W2, b2, fc2_out =

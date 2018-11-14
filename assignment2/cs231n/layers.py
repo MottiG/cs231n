@@ -444,8 +444,8 @@ def conv_backward_naive(dout, cache):
 
     for im in range(N):
         for f in range(F):
-            for i in range(H):
-                for j in range(W):
+            for i in range(H_out):
+                for j in range(W_out):
                     curr_dout = dout[im, f, i, j]
                     dx[im, :, i*stride:i*stride + HH, j*stride:j*stride + WW] += w[f] * curr_dout
                     dw[f] += x_padded[im, :, i*stride:i*stride + HH, j*stride:j*stride + WW] * curr_dout
@@ -562,7 +562,10 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
     # version of batch normalization defined above. Your implementation should#
     # be very short; ours is less than five lines.                            #
     ###########################################################################
-    pass
+    N, C, H, W = x.shape
+    x = x.transpose(0, 2, 3, 1).reshape(N*H*W, C)
+    out, cache = batchnorm_forward(x, gamma, beta, bn_param)
+    out = out.reshape(N, H, W, C).transpose(0, 3, 1, 2)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -592,7 +595,10 @@ def spatial_batchnorm_backward(dout, cache):
     # version of batch normalization defined above. Your implementation should#
     # be very short; ours is less than five lines.                            #
     ###########################################################################
-    pass
+    N, C, H, W = dout.shape
+    dout = dout.transpose(0, 2, 3, 1).reshape(N*H*W, C)
+    dx, dgamma, dbeta = batchnorm_backward(dout, cache)
+    dx = dx.reshape(N, H, W, C).transpose(0, 3, 1, 2)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
